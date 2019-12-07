@@ -1,0 +1,9 @@
+.alert{position: fixed;z-index: 9999;top:0px;width:100%;text-align: center;}
+.btn-list{padding:5px 0px;}
+.no-record{padding:10px;text-align: center;border:1px solid #CCC}
+.page{text-align: right}
+.pagination{padding:0px;margin:0px}
+.upload-img-wrap img{margin:0px;padding:0px;width:150px;height:150px}
+.upload-img-wrap{position: relative;width:150px;height:150px}
+.upload-img-wrap .upload-delete{position: absolute;right:0px;top:0px;padding:1px 8px;color:white;cursor: pointer;font-size: 20px;background:rgba(0,0,0,0.5)}
+.h140{height: 140px;}
