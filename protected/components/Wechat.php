@@ -26,7 +26,7 @@ class Wechat {
         //根据用户传过来的消息类型进行不同的响应
         //1、接收微信服务器POST过来的数据，XML数据包
         $postData = file_get_contents("php://input");
-        //UtilD::log('postData:'.var_export($postData,true));
+        //Utils::log('postData:'.var_export($postData,true));
         if (!$postData) {
             echo "error";
             exit();
@@ -94,7 +94,7 @@ class Wechat {
         //$access_token = Yii::app()->cache->get('access_token');
         //if (!$access_token) {
         $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={$this->appid}&secret={$this->appsecret}";
-        $rtn = UtilD::curl($url);
+        $rtn = Utils::curl($url);
         $rtn_arr = CJSON::decode($rtn, true);
         $access_token = $rtn_arr['access_token'];
         Yii::app()->cache->set('access_token', $access_token, 5000);
@@ -111,7 +111,7 @@ class Wechat {
         //echo $access_token;exit;
         $url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=" . $access_token;
         $data = CJSON::encode($arr);
-        $r = UtilD::curl_post($url, $data);
+        $r = Utils::curl_post($url, $data);
         $r = CJSON::decode($r, true);
         return $r;
         //echo $r['errcode'] == 0 ? 1 : 0;
@@ -124,7 +124,7 @@ class Wechat {
     public function getMenu() {
         $access_token = $this->getAccessToken();
         $url = "https://api.weixin.qq.com/cgi-bin/menu/get?access_token={$access_token}";
-        return UtilD::curl($url);
+        return Utils::curl($url);
     }
 
     /**
@@ -138,7 +138,7 @@ class Wechat {
         if ($next_openid) {
             $url .= "&next_openid={$next_openid}";
         }
-        return UtilD::curl($url);
+        return Utils::curl($url);
     }
 
     /**
@@ -149,15 +149,15 @@ class Wechat {
     public function getUserInfo($openid) {
         $access_token = $this->getAccessToken();
         $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token={$access_token}&openid={$openid}&lang=zh_CN";
-        return UtilD::curl($url);
+        return Utils::curl($url);
     }
 
     //接收事件推送
-    private function receiveEvent($obj) {        UtilD::log($obj->Event);
+    private function receiveEvent($obj) {        Utils::log($obj->Event);
         switch ($obj->Event) {
             //关注事件
             case 'subscribe':
-                UtilD::log($obj);
+                Utils::log($obj);
                 //扫描带参数的二维码，用户未关注时，进行关注后的事件
                 if (!empty($obj->EventKey)) {
                     //做相关处理
@@ -185,7 +185,7 @@ class Wechat {
                 break;
             case "LOCATION":
                 //if (!Yii::app()->session['location']) {
-                //UtilD::log($obj);
+                //Utils::log($obj);
                 $openid = $obj->FromUserName;
                 $weixin_user_model = WeixinUser::model()->findByPk($openid);
                 if ($weixin_user_model) {
@@ -334,7 +334,7 @@ class Wechat {
             ),
         );
         $data = urldecode(CJSON::encode($arr));
-        $r = UtilD::curl_post($url, $data);
+        $r = Utils::curl_post($url, $data);
         $r = CJSON::decode($r, true);
         return $r['errcode'] == 0 ? 1 : 0;
     }
@@ -350,7 +350,7 @@ class Wechat {
             'media_id' => $media_id,
         );
         $data = CJSON::encode($data);
-        $rs = UtilD::curl_post($url, $data);
+        $rs = Utils::curl_post($url, $data);
         return CJSON::decode($rs, true);
     }
 
@@ -366,7 +366,7 @@ class Wechat {
             'media_id' => $thumb_media_id,
         );
         $data = CJSON::encode($data);
-        $rs = UtilD::curl_post($url, $data);
+        $rs = Utils::curl_post($url, $data);
         return $rs;
     }
 
@@ -383,7 +383,7 @@ class Wechat {
             'count' => $count
         );
         $data = CJSON::encode($data);
-        $rs = UtilD::curl_post($url, $data);
+        $rs = Utils::curl_post($url, $data);
         return CJSON::decode($rs, true);
     }
 
