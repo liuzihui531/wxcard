@@ -14,8 +14,8 @@
 class WechatController extends Controller{
     public function actionIndex(){
         $wechat = new Wechat();
-        //$wechat->valid();
-        $wechat->responseMsg();
+        $wechat->valid();
+        //$wechat->responseMsg();
     }
 
     public function actionApply() {
