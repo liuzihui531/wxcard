@@ -15,19 +15,19 @@ class MenuController extends Controller{
             "name": "书店介绍", 
             "sub_button": [
                 {
-                   "type": "view_limited", 
+                   "type": "click", 
                    "name": "海呈简介", 
-                   "media_id": "94V8GlP_MNRWefeZuhRmJlejijP9ASb9nlB9N2hRXD4"
+                   "key": "haichengjianjie"
                 }, 
                 {
-                   "type": "view_limited", 
+                   "type": "click", 
                    "name": "海呈门店一览", 
-                   "media_id": "94V8GlP_MNRWefeZuhRmJtUkcbFNhfO0mHQPobqMTtM"
+                   "key": "haichengmendianyilan"
                 },
                 {
                    "type": "click", 
                    "name": "走进海呈", 
-                   "media_id": "zoujinhaicheng"
+                   "key": "zoujinhaicheng"
                 }
             ]
         }, 
@@ -35,9 +35,9 @@ class MenuController extends Controller{
             "name": "不止读书", 
             "sub_button": [
                 {
-                   "type": "view_limited", 
+                   "type": "click", 
                    "name": "爱心活动", 
-                   "media_id": "94V8GlP_MNRWefeZuhRmJv1e0stwx5h2Doc6r7TKChg"
+                   "key": "aixinhuodong"
                 }
             ]
         }, 
