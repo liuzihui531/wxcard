@@ -1178,4 +1178,20 @@ class Utils {
         return unserialize($serial_str);
     }
 
+    public static function sendSmsByAliYun($mobile, $content) {
+
+    }
+
+    public static function redis($type = 'main'){
+        $redisConfig = Yii::app()->params['redis'];
+        if(!isset($redisConfig[$type])){
+            return false;
+        }
+        $config = $redisConfig[$type];
+        $db = isset($config['db']) ? $config['db'] : 0;
+        $attr = ['db_id' => $db];
+        include_once __DIR__.'/RedisD.php';
+        return RedisD::getInstance($config, $attr);
+    }
+
 }

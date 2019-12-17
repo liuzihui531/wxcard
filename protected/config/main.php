@@ -23,7 +23,7 @@ return array(
             'class' => 'system.gii.GiiModule',
             'password' => '123456',
             // If removed, Gii defaults to localhost only. Edit carefully to taste.
-            'ipFilters' => array('127.0.0.1', '192.168.10.196', '::1'),
+            'ipFilters' => array('*'),
         ),
         'admin','wechat'
     ),
@@ -81,6 +81,13 @@ return array(
             'email_password' => 'ycGPP163',
             'email_from' => 'ycgpp@126.com',
             'site_name' => 'xxx',
+        ),
+        'redis' => array(
+            'main' => array(
+                'host' => '127.0.0.1',
+                'port' => 6379,
+                'auth' => array(),
+            ),
         ),
     ),
 );

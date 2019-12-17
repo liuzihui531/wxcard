@@ -4,12 +4,12 @@
  * wechat php test
  */
 //define your token
-define("TOKEN", "lnny");
+define("TOKEN", "haicheng");
 
 class Wechat {
 
-    public $appid = "wx58592710d1056c67";
-    public $appsecret = "fe38ff6822bd63a427fb9cd544c70691";
+    public $appid = "wxecf01afa7fb7a022";
+    public $appsecret = "6d12167859b0bbd972de2c02ecb9469e";
 
     public function valid() {
         $echoStr = $_GET["echostr"];
