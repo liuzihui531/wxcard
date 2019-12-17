@@ -169,9 +169,7 @@ class Wechat {
                 if ($user_info) {
                     WeixinUser::model()->addWeixinUser($user_info);
                 }
-                //$content .= "　　欢迎关注深南燃气，目前深南燃气订气服务只开通了南山、福田、盐田、宝安。其他区域陆续上线，敬请期待。\r\n　　通过深南燃气微信平台下单，将会享受优惠折扣。\r\n　　如您是送气工推荐的，<a href='http://m.szlnny.com/wechat/select_invite'>请点击选择送气工</a>";
-                //$content .= "　　欢迎关注深南燃气，目前深南燃气订气服务只开通了南山、福田、盐田、宝安。其他区域陆续上线，敬请期待。\r\n　　通过深南燃气微信平台下单，将会享受优惠折扣。\r\n　　温馨提示：下单时请认准“<span style='font-weight:bold;color:red'>深南燃气</span>”的钢瓶下单，钢瓶统一银灰色或者紫色，上面印有“<span style='font-weight:bold;color:red'>深南燃气</span>“及“<span style='font-weight:bold;color:red'>BSN</span>”的钢瓶编码字样，其他颜色钢瓶或其他字样本公司一律不接收。";//\r\n　　如您是送气工推荐的，<a href='http://m.szlnny.com/wechat/select_invite'>请点击选择送气工</a>";
-                $content .= "　　欢迎关注六南燃气";
+                $content .= "";
                 echo $this->replyText($obj, $content , true);
                 break;
             //取消关注事件
@@ -205,110 +203,85 @@ class Wechat {
             case 'CLICK':
                 //
                 switch ($obj->EventKey) {
-                    case 'PRODUCE_INTRODUCE':
-                        //IgZJlAIuMQVCfANfxJlCh4YEaccRnG_V7eDNr77AWQs
-                        $media_id = "CPz0nW_vQ6xCGLrAdQPKaTS5pbwX3mk2w-6AW8uohtU";
-                        $media_list = $this->getBatchgetMaterial('news', 0, 10);
-                        $media_info = array();
-                        foreach ($media_list['item'] as $k => $v) {
-                            if ($v['media_id'] == $media_id) {
-                                $media_info = $v;
-                            }
-                        }
+                    case 'haichengjianjie':
+                        //94V8GlP_MNRWefeZuhRmJlejijP9ASb9nlB9N2hRXD4
+                        $media_id = "94V8GlP_MNRWefeZuhRmJlejijP9ASb9nlB9N2hRXD4";
+                        $media_info = $this->getMaterial($media_id);
                         $newArr = array();
-                        foreach ($media_info['content']['news_item'] as $k => $v) {
+                        foreach ($media_info['news_item'] as $k => $v) {
                             $newArr[$k] = array(
                                 'Title' => $v['title'],
                                 'Description' => $v['digest'],
-                                'PicUrl' => $v['title'],
+                                'PicUrl' => '',
                                 'Url' => $v['url'],
                             );
-                            if (!is_file(dirname(Yii::app()->basePath) . '/www/upload/weixin/' . $v['thumb_media_id'] . '.jpg')) {
-                                $img = $this->getThumbMediaId($v['thumb_media_id']);
-                                file_put_contents(dirname(Yii::app()->basePath) . '/www/upload/weixin/' . $v['thumb_media_id'] . '.jpg', $img);
+                            if ($v['thumb_media_id']) {
+                                if (!is_file(dirname(Yii::app()->basePath) . '/www/upload/weixin/' . $v['thumb_media_id'] . '.jpg')) {
+                                    $img = $this->getThumbMediaId($v['thumb_media_id']);
+                                    file_put_contents(dirname(Yii::app()->basePath) . '/www/upload/weixin/' . $v['thumb_media_id'] . '.jpg', $img);
+                                }
+                                $newArr[$k]['PicUrl'] = Yii::app()->request->hostInfo . '/upload/weixin/' . $v['thumb_media_id'] . '.jpg';
                             }
-                            $newArr[$k]['PicUrl'] = Yii::app()->request->hostInfo . '/upload/weixin/' . $v['thumb_media_id'] . '.jpg';
                         }
                         echo $this->replyNews($obj, $newArr);
                         break;
-                    case 'SAFE_USE':
-                        $media_id = "CPz0nW_vQ6xCGLrAdQPKae59z0W0br06BmWGLQcDjB4";
-                        $media_list = $this->getBatchgetMaterial('news', 0, 10);
-                        $media_info = array();
-                        foreach ($media_list['item'] as $k => $v) {
-                            if ($v['media_id'] == $media_id) {
-                                $media_info = $v;
-                            }
-                        }
+                    case 'haichengmendianyilan':
+                        $media_id = "94V8GlP_MNRWefeZuhRmJtUkcbFNhfO0mHQPobqMTtM";
+                        $media_info = $this->getMaterial($media_id);
                         $newArr = array();
-                        foreach ($media_info['content']['news_item'] as $k => $v) {
+                        foreach ($media_info['news_item'] as $k => $v) {
                             $newArr[$k] = array(
                                 'Title' => $v['title'],
                                 'Description' => $v['digest'],
-                                'PicUrl' => $v['title'],
+                                'PicUrl' => '',
                                 'Url' => $v['url'],
                             );
-                            if (!is_file(dirname(Yii::app()->basePath) . '/www/upload/weixin/' . $v['thumb_media_id'] . '.jpg')) {
-                                $img = $this->getThumbMediaId($v['thumb_media_id']);
-                                file_put_contents(dirname(Yii::app()->basePath) . '/www/upload/weixin/' . $v['thumb_media_id'] . '.jpg', $img);
+                            if ($v['thumb_media_id']) {
+                                if (!is_file(dirname(Yii::app()->basePath) . '/www/upload/weixin/' . $v['thumb_media_id'] . '.jpg')) {
+                                    $img = $this->getThumbMediaId($v['thumb_media_id']);
+                                    file_put_contents(dirname(Yii::app()->basePath) . '/www/upload/weixin/' . $v['thumb_media_id'] . '.jpg', $img);
+                                }
+                                $newArr[$k]['PicUrl'] = Yii::app()->request->hostInfo . '/upload/weixin/' . $v['thumb_media_id'] . '.jpg';
                             }
-                            $newArr[$k]['PicUrl'] = Yii::app()->request->hostInfo . '/upload/weixin/' . $v['thumb_media_id'] . '.jpg';
                         }
                         echo $this->replyNews($obj, $newArr);
                         break;
-                    case 'NEW_ACTIVITY':
-                        $media_id = "CPz0nW_vQ6xCGLrAdQPKabB5CmaEfSNc423jE40Z6AU";
-                        $media_list = $this->getBatchgetMaterial('news', 0, 10);
-                        $media_info = array();
-                        foreach ($media_list['item'] as $k => $v) {
-                            if ($v['media_id'] == $media_id) {
-                                $media_info = $v;
-                            }
-                        }
+                    case 'aixinhuodong':
+                        $media_id = "94V8GlP_MNRWefeZuhRmJv1e0stwx5h2Doc6r7TKChg";
+                        $media_info = $this->getMaterial($media_id);
                         $newArr = array();
-                        foreach ($media_info['content']['news_item'] as $k => $v) {
+                        foreach ($media_info['news_item'] as $k => $v) {
                             $newArr[$k] = array(
                                 'Title' => $v['title'],
                                 'Description' => $v['digest'],
-                                'PicUrl' => $v['title'],
+                                'PicUrl' => '',
                                 'Url' => $v['url'],
                             );
-                            if (!is_file(dirname(Yii::app()->basePath) . '/www/upload/weixin/' . $v['thumb_media_id'] . '.jpg')) {
-                                $img = $this->getThumbMediaId($v['thumb_media_id']);
-                                file_put_contents(dirname(Yii::app()->basePath) . '/www/upload/weixin/' . $v['thumb_media_id'] . '.jpg', $img);
+                            if ($v['thumb_media_id']) {
+                                if (!is_file(dirname(Yii::app()->basePath) . '/www/upload/weixin/' . $v['thumb_media_id'] . '.jpg')) {
+                                    $img = $this->getThumbMediaId($v['thumb_media_id']);
+                                    file_put_contents(dirname(Yii::app()->basePath) . '/www/upload/weixin/' . $v['thumb_media_id'] . '.jpg', $img);
+                                }
+                                $newArr[$k]['PicUrl'] = Yii::app()->request->hostInfo . '/upload/weixin/' . $v['thumb_media_id'] . '.jpg';
                             }
-                            $newArr[$k]['PicUrl'] = Yii::app()->request->hostInfo . '/upload/weixin/' . $v['thumb_media_id'] . '.jpg';
                         }
                         echo $this->replyNews($obj, $newArr);
                         break;
-                    case 'USE_HELP':
-                        $media_id = "CPz0nW_vQ6xCGLrAdQPKabJlcxE0XkQzcqcIaMi8x8k";
-                        $media_list = $this->getBatchgetMaterial('news', 0, 10);
-                        $media_info = array();
-                        foreach ($media_list['item'] as $k => $v) {
-                            if ($v['media_id'] == $media_id) {
-                                $media_info = $v;
-                            }
-                        }
-                        $newArr = array();
-                        foreach ($media_info['content']['news_item'] as $k => $v) {
-                            $newArr[$k] = array(
-                                'Title' => $v['title'],
-                                'Description' => $v['digest'],
-                                'PicUrl' => $v['title'],
-                                'Url' => $v['url'],
-                            );
-                            if (!is_file(dirname(Yii::app()->basePath) . '/www/upload/weixin/' . $v['thumb_media_id'] . '.jpg')) {
-                                $img = $this->getThumbMediaId($v['thumb_media_id']);
-                                file_put_contents(dirname(Yii::app()->basePath) . '/www/upload/weixin/' . $v['thumb_media_id'] . '.jpg', $img);
-                            }
-                            $newArr[$k]['PicUrl'] = Yii::app()->request->hostInfo . '/upload/weixin/' . $v['thumb_media_id'] . '.jpg';
-                        }
-                        echo $this->replyNews($obj, $newArr);
-                        break;
-                    case 'MY_ADDRESS':
+                    case 'zoujinhaicheng':
                         $openid = $obj->FromUserName;
-                        echo $this->replyText($obj, $html);
+                        $content = "海呈书店解放路总店：
+https://mp.weixin.qq.com/s/C0SOZqCjksQvWIet-6JRGA     
+
+
+海呈书店大东海分店：
+https://mp.weixin.qq.com/s/VbWw2RQkbqiRKp7lsXiwbw
+
+海呈书店港华分店：
+https://mp.weixin.qq.com/s/VzuBIdcmtsEohyrRDnHnKg
+
+海呈书店海甸城店：
+https://mp.weixin.qq.com/s/XPwqHTscYaNAEULemJ1gNw";
+                        echo $this->replyText($obj, $content);
                         break;
                     default:
                         echo $this->replyText($obj, "你的点击的是其他事件");
