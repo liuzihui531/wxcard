@@ -7,6 +7,8 @@
  */
 class MenuController extends Controller{
     public function actionIndex() {
+        //海呈门店一览
+        //如果正好
         $json = '{
     "button": [
         {
@@ -15,12 +17,12 @@ class MenuController extends Controller{
                 {
                    "type": "view_limited", 
                    "name": "海呈简介", 
-                   "media_id": "MEDIA_ID2"
+                   "media_id": "94V8GlP_MNRWefeZuhRmJlejijP9ASb9nlB9N2hRXD4"
                 }, 
                 {
                    "type": "view_limited", 
-                   "name": "海呈书店一览", 
-                   "media_id": "MEDIA_ID2"
+                   "name": "海呈门店一览", 
+                   "media_id": "94V8GlP_MNRWefeZuhRmJtUkcbFNhfO0mHQPobqMTtM"
                 },
                 {
                    "type": "click", 
@@ -35,7 +37,7 @@ class MenuController extends Controller{
                 {
                    "type": "view_limited", 
                    "name": "爱心活动", 
-                   "media_id": "MEDIA_ID3"
+                   "media_id": "94V8GlP_MNRWefeZuhRmJv1e0stwx5h2Doc6r7TKChg"
                 }
             ]
         }, 
