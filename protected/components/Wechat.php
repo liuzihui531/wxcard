@@ -110,7 +110,7 @@ class Wechat {
         $access_token = $this->getAccessToken();
         //echo $access_token;exit;
         $url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=" . $access_token;
-        $data = CJSON::encode($arr);
+        $data = json_encode($arr, JSON_UNESCAPED_UNICODE);
         $r = Utils::curl_post($url, $data);
         $r = CJSON::decode($r, true);
         return $r;
