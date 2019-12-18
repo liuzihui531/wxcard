@@ -26,7 +26,10 @@ class Wechat {
         //根据用户传过来的消息类型进行不同的响应
         //1、接收微信服务器POST过来的数据，XML数据包
         $postData = file_get_contents("php://input");
-        //Utils::log('postData:'.var_export($postData,true));
+        if (!$postData) {
+            $postData = $_REQUEST;
+        }
+        Utils::log('postData:'.var_export($postData,true));
         if (!$postData) {
             echo "error";
             exit();
@@ -34,6 +37,8 @@ class Wechat {
 
         //2、解析XML数据包
         $object = simplexml_load_string($postData, "SimpleXMLElement", LIBXML_NOCDATA);
+        Utils::log("msg_object:".json_encode($object));
+        $object = json_decode(json_encode($object));
         //获取消息类型
         $MsgType = $object->MsgType;
         switch ($MsgType) {
@@ -153,7 +158,8 @@ class Wechat {
     }
 
     //接收事件推送
-    private function receiveEvent($obj) {        Utils::log($obj->Event);
+    private function receiveEvent($obj) {
+        Utils::log($obj->Event);
         switch ($obj->Event) {
             //关注事件
             case 'subscribe':
@@ -223,6 +229,7 @@ class Wechat {
                                 $newArr[$k]['PicUrl'] = Yii::app()->request->hostInfo . '/upload/weixin/' . $v['thumb_media_id'] . '.jpg';
                             }
                         }
+                        Utils::log("replyNews:".json_encode($newArr));
                         echo $this->replyNews($obj, $newArr);
                         break;
                     case 'haichengmendianyilan':
@@ -360,11 +367,20 @@ https://mp.weixin.qq.com/s/XPwqHTscYaNAEULemJ1gNw";
         return CJSON::decode($rs, true);
     }
 
+    //创建会员卡
+    public function createCard($data) {
+        $access_token = $this->getAccessToken();
+        $url = "https://api.weixin.qq.com/card/create?access_token=". $access_token;
+        $data = CJSON::encode($data);
+        $rs = Utils::curl_post($url, $data);
+        return CJSON::decode($rs, true);
+    }
+
     //接收文本消息
     private function receiveText($obj) {
         //获取文本消息的内容
         $content = $obj->Content;
-        $content = '如对公众号使用有疑问请咨询8992777.';
+        $content = '';
         //发送文本消息
         return $this->replyText($obj, $content);
     }
@@ -427,7 +443,7 @@ https://mp.weixin.qq.com/s/XPwqHTscYaNAEULemJ1gNw";
     }
 
     //发送文本消息
-    private function replyText($obj, $content , $is_abs = false) {
+    private function replyText($obj, $content) {
         $replyXml = "<xml>
 						<ToUserName><![CDATA[%s]]></ToUserName>
 						<FromUserName><![CDATA[%s]]></FromUserName>
@@ -436,13 +452,6 @@ https://mp.weixin.qq.com/s/XPwqHTscYaNAEULemJ1gNw";
 						<Content><![CDATA[%s]]></Content>
 						</xml>";
         //返回一个进行xml数据包
-        if ($content == 'tj') {
-            //$content = '<a href="http://m.szlnny.com/tongji/store">查看统计</a>';
-        } else {
-            if (!$is_abs) {
-                $content = '感谢关注六南能源微信公众平台，如有疑问请致电0755-89927777。';
-            }
-        }
         $resultStr = sprintf($replyXml, $obj->FromUserName, $obj->ToUserName, time(), $content);
         return $resultStr;
     }
