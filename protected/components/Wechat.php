@@ -371,7 +371,7 @@ https://mp.weixin.qq.com/s/XPwqHTscYaNAEULemJ1gNw";
     public function createCard($data) {
         $access_token = $this->getAccessToken();
         $url = "https://api.weixin.qq.com/card/create?access_token=". $access_token;
-        $data = CJSON::encode($data);
+        $data = json_encode($data, JSON_UNESCAPED_UNICODE);
         $rs = Utils::curl_post($url, $data);
         return CJSON::decode($rs, true);
     }
